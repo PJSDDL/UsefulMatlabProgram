@@ -1,0 +1,23 @@
+function Work13
+    clc
+
+    u = 0;
+    v = 0;
+
+    %ËÑË÷·¶Î§
+    x1 = 0;
+    x2 = 1;
+
+    for i = 1:10
+        u = x1 + 0.618*(x2 - x1);
+        v = x1 + 0.382*(x2 - x1);
+        
+        if(f(u) > f(v))
+            
+    end
+end
+
+function [y] = f(x)
+    y = x^2 - sin(x);
+end
+

@@ -1,0 +1,39 @@
+%牛顿法求方程的近似根
+function [] = Work1vs2()
+    clc
+
+    a = 1;
+    b = 2;
+
+    for i = 1:50
+        x = (a+b)/2.0;  
+        if((sin(x) - x*x/2)*(sin(a) - a*a/2) < 0)
+             b = x;
+        else
+            a = x;
+        end
+    
+        if(b-a < 0.5*1e-5)
+            i
+            fprintf('a = %3.7f\n',b)
+            fprintf('a = %3.7f\n',a)
+            break
+        end
+    end
+end
+
+
+function [y, dy] = f1(x)
+    y = x * exp(x) - 1;
+    dy = (x + 1) * exp(x);
+end
+
+function [y, dy] = f2(x)
+    y = x^3 - x - 1;
+    dy = 3*x*x - 1;
+end
+
+function [y, dy] = f3(x)
+    y = x^3 - x - 1;
+    dy = 3*x*x - 1;
+end

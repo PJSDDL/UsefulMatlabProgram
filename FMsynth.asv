@@ -1,0 +1,19 @@
+clear;
+clc;
+
+fs = 44100;
+
+signal = sin(6.28*880/fs*[1:5*fs]);
+signal =  signal/3;
+carrier = sin(6.28*880/fs*[1:5*fs]);
+
+time_seq = linspace(1,10,5*fs);
+
+%FM
+FM_signal = sin(6.28*1046/fs*time_seq+signal);
+plot(FM_signal)
+FM_signal = sin(6.28*131/fs*[1:5*fs]+FM_signal);
+FM_signal = sin(6.28*524/fs*[1:5*fs]+5*FM_signal);
+wavwrite(FM_signal,fs,'FM');
+
+fs

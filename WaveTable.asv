@@ -1,0 +1,14 @@
+clc
+close all
+
+%程序用于生成单片机波表
+
+% x = 127*sin(2*3.1415926*[1:1000]/1000) + 127;
+x = 
+x = fix(x);
+plot(x)
+
+fileID = fopen('table.txt', 'w');
+fprintf(fileID, ',%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\n', x);
+fclose(fileID);
+

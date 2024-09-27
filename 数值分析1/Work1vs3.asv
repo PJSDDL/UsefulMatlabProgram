@@ -1,0 +1,21 @@
+%牛顿法求方程的近似根
+function [] = Work1vs3()
+    clc
+
+    x = 0.4;
+    x_last = 0.6;
+    for i = 1:20
+        [y_last, ] = f1(x_last);
+        [y, ] = f1(x);
+        x = x - y*()/dy;
+    end
+    x
+    
+end
+
+
+function [y, dy] = f1(x)
+    y = x * exp(x) - 1;
+    dy = (x + 1) * exp(x);
+end
+

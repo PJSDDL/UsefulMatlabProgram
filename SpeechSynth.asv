@@ -1,0 +1,23 @@
+clc
+close all
+
+%”Ô“Ù∆µ∆◊
+[x,fs] = wavread('a.wav');
+start = 440000;
+length = 450000-440000;
+x_e = x(start: start+length);
+
+fft_speech = log(abs(fft(x_e)));
+plot((0:length)*fs/length, fft_speech)
+
+
+%æ‚≥›≤®
+t = [1:fs];  % ±º‰
+x_saw = sawtooth(2*pi*328/fs*t) / 60;
+
+hold
+scale = 1: length;
+
+fft_saw = log(abs(fft(x_saw(scale))));
+plot(scale*fs/length, fft_saw, 'r')
+

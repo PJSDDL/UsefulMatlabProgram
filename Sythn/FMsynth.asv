@@ -1,0 +1,54 @@
+clear;
+clc;
+
+fs = 44100;
+f1 = 880/fs;
+rate = 2.5;
+rate = 20;
+
+time_seq = linspace(1, 1*fs, 1*fs);
+
+phase = 880; %1相位等于 40000/44100Hz
+tri_flag = 0;
+y_reg = -20000;
+
+%OSC1
+y = [];
+for i = time_seq
+    if(tri_flag == 0)
+        y_reg = y_reg + phase;
+    else
+        y_reg = y_reg - phase;
+    end
+    
+    if(y_reg > 20000)
+        tri_flag = 1;
+    elseif(y_reg < -20000)
+        tri_flag = 0;
+    end
+    
+    y1 = [y1, y_reg];
+end
+
+%OSC2 moudulate by OSC1
+y2 = [];
+for i = time_seq
+    if(tri_flag == 0)
+        y2_phase = y2_phase + phase + y1(i)*rate;
+    else
+        y2_phase = y2_phase - phase - y1(i)*rate;
+    end
+    
+    if(y2_phase < 20000)
+        y2 = 1;
+    else
+        y2 = 0;
+    end
+    
+    y = [y, y_reg];
+end
+
+plot(y)
+
+wavwrite(y, fs, 'FM');
+sound(y, fs);

@@ -1,0 +1,27 @@
+clc
+
+w = [1:1024]/1024; % 归一化角频率
+fs = 48*1e3
+t = [1:fs*3];  %时间
+
+%锯齿波
+x = sawtooth(2*pi*400/fs*t);
+
+%第一组谐振滤波器
+f1 = 800/fs;  %中心频率
+Q = 10;
+Am1 = 10;
+w_normal1 = w/f1;
+Hs1 = Am * (1j * w_normal1 / Q) ./ (1 + 1j * w_normal1 / Q - w_normal1.^2);
+
+%第二组谐振滤波器
+f2 = 1600/fs;  %中心频率
+Q = 5;
+Am2 = 2;
+w_normal2 = w/f2;
+Hs2 = Am * (1j * w_normal2 / Q) ./ (1 + 1j * w_normal2 / Q - w_normal2.^2);
+
+x_fft = fft(x());
+y_fft = x_fft.*Hs1.*Hs2;
+
+plot(log(abs(x_fft)))

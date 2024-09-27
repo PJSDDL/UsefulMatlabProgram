@@ -1,0 +1,47 @@
+clc;
+clear;
+
+Ts = 1/2000;  %采样间隔，单位毫秒
+N = 101;
+w1 = 495*Ts*2*pi;    %计算数字频率
+w2 = 505*Ts*2*pi; 
+
+%理想滤波器
+h_ideal = ideallp(w2,N)-ideallp(w1,N);
+
+%窗函数
+h_tri = triang(N);
+
+%测量滤波器曲线
+[freqz_tri,w] = freqz(h_ideal.*h_tri',[1],1000,'whole');
+freqz_tri_abs = abs(freqz_tri);
+
+% subplot(3,1,1);
+% plot(h_ideal.*h_tri');
+% subplot(3,1,2);
+% plot(w,20*log10(freqz_tri_abs/max(freqz_tri_abs)));
+% subplot(3,1,3);
+% plot(w,phase(freqz_tri));
+
+%正弦波
+x1 = sin(Ts*400*2*pi*[1:1000]);
+x2 = sin(Ts*500*2*pi*[1:1000]);
+x3 = sin(Ts*600*2*pi*[1:1000]);
+x4 = sin(Ts*700*2*pi*[1:1000]);
+
+subplot(4,2,1);
+plot(x1);
+subplot(4,2,3);
+plot(x2);
+subplot(4,2,5);
+plot(x3);
+subplot(4,2,7);
+plot(x4);
+subplot(4,2,2);
+plot(conv[x1,h_ideal.*h_tri));
+subplot(4,2,4);
+plot(x2);
+subplot(4,2,6);
+plot(x3);
+subplot(4,2,8);
+plot(x4);

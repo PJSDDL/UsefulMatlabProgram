@@ -1,0 +1,24 @@
+%A B C D投资x1 x2 x3 x4
+%资金和为100
+%x1 <= x2+x3+x4
+%x2+x3 > x4
+%min -(18x1 + 10x2+ 9x3 + 12x4)
+
+function [xm,fm,noi] = Work21(A,b,c)
+    clc,clear;
+    %不等式约束
+    A=[ 1 -1 -1 -1
+        0 -1 -1  1 ];
+    b=[0.1 0.1];
+    %等式约束
+    Aeq = [1 1 1 1];
+    beq = [100];
+    %函数
+    c=[-18 -10 -9 -12];
+    
+    x = linprog(c,A,b,Aeq,beq,[0 0 0 0],[]);
+    
+    disp('最优解为：');
+    disp(x);
+
+end

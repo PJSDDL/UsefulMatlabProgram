@@ -1,0 +1,10 @@
+clc
+close all
+
+y = [];
+temp = 0;
+w = 6.28 * 0.001;
+
+for i = 1: 1000
+    for n = 1: 2: 11
+        temp = temp + sin( w * i);

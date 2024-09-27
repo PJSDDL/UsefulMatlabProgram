@@ -1,0 +1,25 @@
+clc
+
+% ÔªÒô
+[x1,fs1]=wavread('6.wav'); 
+% Ä¦²ÁÒô
+samples1 = [11015,15251];
+[x2,fs2]=wavread('4.wav',samples1); 
+
+x1_cceps = cceps(x1);
+x2_cceps = cceps(x2);
+
+subplot(1,2,1)
+plot(x1_cceps)
+subplot(1,2,2)
+plot(x1_cceps)
+figure
+
+[xhat1,yhat1] = rceps(y);
+[xhat2,yhat2] = rceps(y);
+
+subplot(1,2,1)
+plot(x1_cceps)
+subplot(1,2,2)
+plot(x1_cceps)
+figure

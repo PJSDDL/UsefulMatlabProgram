@@ -1,0 +1,29 @@
+clc
+
+[y, fs] = wavread('1.wav');
+
+plot(y)
+
+x1 = y(69500:71000);
+x2 = y(71000:74500);
+
+%项目1
+figure(2)
+plot(log(abs(fft(x1(100:300)))));%窗口宽度200
+figure(3)
+plot(log(abs(fft(x2(100:3000)))));
+
+%项目2
+figure(4)
+plot(log(abs(fft(x1(100:200))))); %窗口宽度100
+figure(5)
+plot(log(abs(fft(x1(100:700))))); %窗口宽度600
+figure(6)
+x1_ham = x1(100:300).*hamming(201);
+plot(log(abs(fft(x1_ham)))); %海明窗
+
+%项目3
+figure(7)
+x2_fft = log(abs(fft(x2(100:3000))));
+
+plot(log(abs(fft(x2(100:3000)))));

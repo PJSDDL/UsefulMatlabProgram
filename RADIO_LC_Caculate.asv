@@ -1,0 +1,78 @@
+clc
+clear
+
+%-------初始参数------
+% 天线电感  uH  不参与优化
+L1 = 264.6;
+% 天线双联并联电容  pF
+Cp = 10;
+% 本振电感  uH
+L2 = 10;
+% 垫整电容  pF
+Ct = 10;
+% 本振双联并联电容  pF
+Co = 10;
+% 等容双联容值 pF
+C  = 20:400;
+
+%-------计算出高低端频率对应的电容值------
+Cmin = round(1e6/(1.605*1.605*6.28*6.28*L1))
+Cmax = round(1e6/(0.525*0.525*6.28*6.28*L1))
+Cmin = Cmin - C(1); %电容值转为数组索引值
+Cmax = Cmax - C(1); %电容值转为数组索引值
+
+%-------1 、设定L2 Cp初始值 ------
+for L2 = 10:L1
+    for Cp = 1:50 
+        %-------2 、解二次方程，求Ct Co------
+        %-------注意单位转换-------
+        Kmax = 1e-6 * L2 * (45600*6.28 + 1e9/sqrt(L1*(Cmax+Cp)))^2;
+        Kmin = 1e-6 * L2 * (45600*6.28 + 1e9/sqrt(L1*(Cmin+Cp)))^2;
+        
+        a = 1; b = (Cmin + Cmax)*1e-12; 
+        c= Cmin*Cmax*1e-24 + 1e-12*(Cmin-Cmax)/(Kmin-Kmax); % 求Co
+        
+        if(b^2 - 4*a*c < 0)
+            continue
+        end
+        
+        Co = 1e12 * (-b + sqrt(b^2 - 4*a*c))/2;
+        
+        
+
+        %-------3、性能评价------
+        % 频率差 MHz
+        C_test = [C(round(Cmax/2+Cmin/2)), C(round(3*Cmax/4+Cmin/4)), C(round(3*Cmin/4+Cmax/4))]; % 取三个中端频率值
+        CL = 1./(1/Ct + 1./(Co+C_test)); % 本振电容值
+        Ci = Cp + C_test; % 天线电容值
+        fL = 1000./(6.28*sqrt(L2*CL));
+        fi = 1000./(6.28*sqrt(L1*Ci));
+
+        %  计算当前误差，采用均方误差公式
+        freq_err = (fL-fi-0.465);
+        err = sum(freq_err.*freq_err)/3;
+
+        % 满足条件停止算法
+        if(err < 2)
+            break;
+        end
+   
+    end
+end
+
+err
+Co
+Cp
+Ct
+L2
+
+% 画出当前本振与天线回路频率差
+% 频率差 MHz
+CL = 1./(1/Ct + 1./(Co+C)); % 本振电容值
+Ci = Cp+C; % 天线电容值
+fL = 1000./(6.28*sqrt(L2*CL));
+fi = 1000./(6.28*sqrt(L1*Ci));
+
+close all
+figure(2)
+plot(fL(Cmin:Cmax)-fi(Cmin:Cmax))
